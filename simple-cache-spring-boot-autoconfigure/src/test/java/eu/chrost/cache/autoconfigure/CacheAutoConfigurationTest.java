@@ -17,16 +17,15 @@ class CacheAutoConfigurationTest {
             .withConfiguration(AutoConfigurations.of(CacheAutoConfiguration.class));
 
     @Test
-    void givenDefaultConfigurationAndNoPropertySet_whenRunContext_thenExceptionIsThrown() {
+    void givenDefaultConfiguration_whenGetCacheSize_thenDefaultValueIsReturned() {
         contextRunner.run(context -> {
-            assertThatExceptionOfType(IllegalStateException.class)
-                    .isThrownBy(() -> context.getBean(CacheStorage.class));
+            assertThat(context.getBean(CacheProperties.class).size()).isEqualTo(10);
         });
     }
 
     @Test
     void givenDefaultConfiguration_whenGetCacheStorageBean_thenHashMapCacheStorageInstanceIsReturned() {
-        contextRunner.withPropertyValues("eu.chrost.cache.size=5").run(context -> {
+        contextRunner.run(context -> {
             assertThat(context).hasSingleBean(CacheStorage.class);
             assertThat(context.getBean(CacheStorage.class)).isSameAs(context.getBean(HashMapCacheStorage.class));
         });
@@ -34,10 +33,7 @@ class CacheAutoConfigurationTest {
 
     @Test
     void givenUserConfiguration_whenGetCacheStorageBean_thenHashMapCacheStorageInstanceBacksOff() {
-        contextRunner
-                .withUserConfiguration(UserConfiguration.class)
-                .withPropertyValues("eu.chrost.cache.size=5")
-                .run(context -> {
+        contextRunner.withUserConfiguration(UserConfiguration.class).run(context -> {
             assertThat(context).hasSingleBean(CacheStorage.class);
             assertThatExceptionOfType(NoSuchBeanDefinitionException.class)
                     .isThrownBy(() -> context.getBean(HashMapCacheStorage.class));
