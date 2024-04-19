@@ -9,22 +9,23 @@ import java.util.Map;
 class HashMapCacheStorage implements CacheStorage {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(HashMapCacheStorage.class);
 
-    private final Map<Object, Object> map = new HashMap<>();
+    private final Map<String, String> map = new HashMap<>();
 
     @Override
-    public Object get(Object key) {
-        log.info("get({})", key);
-        return map.get(key);
+    public String get(String key) {
+        var value = map.get(key);
+        log.info("get({}) => {}", key, value);
+        return value;
     }
 
     @Override
-    public void put(Object key, Object value) {
+    public void put(String key, String value) {
         log.info("put({}, {})", key, value);
         map.put(key, value);
     }
 
     @Override
-    public void remove(Object key) {
+    public void remove(String key) {
         log.info("remove({})", key);
         map.remove(key);
     }

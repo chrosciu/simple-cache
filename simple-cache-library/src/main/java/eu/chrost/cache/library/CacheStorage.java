@@ -1,9 +1,9 @@
 package eu.chrost.cache.library;
 
 public interface CacheStorage {
-    Object get(Object key);
+    String get(String key);
 
-    void put(Object key, Object value);
+    void put(String key, String value);
 
-    void remove(Object key);
+    void remove(String key);
 }

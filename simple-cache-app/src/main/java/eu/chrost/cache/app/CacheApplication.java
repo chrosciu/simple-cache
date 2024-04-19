@@ -21,8 +21,8 @@ class CacheApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("{}", cache.getOrComputeValue("M", () -> "Marcin"));
-        log.info("{}", cache.getOrComputeValue("T", () -> "Tomasz"));
-        log.info("{}", cache.getOrComputeValue("M", () -> "Marek"));
+        log.info(cache.getOrComputeValue("M", () -> "Marcin"));
+        log.info(cache.getOrComputeValue("T", () -> "Tomasz"));
+        log.info(cache.getOrComputeValue("M", () -> "Marek"));
     }
 }

@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 public class Cache {
     private final CacheStorage cacheStorage;
     private final CacheConfig cacheConfig;
-    private final LinkedHashSet<Object> keys;
+    private final LinkedHashSet<String> keys;
 
     public Cache(CacheStorage cacheStorage, CacheConfig cacheConfig) {
         this.cacheStorage = cacheStorage;
@@ -14,13 +14,13 @@ public class Cache {
         this.keys = new LinkedHashSet<>(cacheConfig.size());
     }
 
-    public Object getOrComputeValue(Object key, Supplier<Object> valueSupplier) {
+    public String getOrComputeValue(String key, Supplier<String> valueSupplier) {
         if (keys.contains(key)) {
             return cacheStorage.get(key);
         }
-        Object value = valueSupplier.get();
+        String value = valueSupplier.get();
         if (keys.size() >= cacheConfig.size()) {
-            Object removedKey = keys.removeFirst();
+            String removedKey = keys.removeFirst();
             cacheStorage.remove(removedKey);
         }
         keys.addLast(key);
