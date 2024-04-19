@@ -2,6 +2,7 @@ package eu.chrost.cache.autoconfigure;
 
 import eu.chrost.cache.library.CacheStorage;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -45,23 +46,9 @@ class CacheAutoConfigurationTest {
 
     @Configuration
     static class UserConfiguration {
-
         @Bean
-        CacheStorage myCacheStorage() {
-            return new CacheStorage() {
-                @Override
-                public String get(String key) {
-                    return null;
-                }
-
-                @Override
-                public void put(String key, String value) {
-                }
-
-                @Override
-                public void remove(String key) {
-                }
-            };
+        CacheStorage mockedCacheStorage() {
+            return Mockito.mock(CacheStorage.class);
         }
 
     }
