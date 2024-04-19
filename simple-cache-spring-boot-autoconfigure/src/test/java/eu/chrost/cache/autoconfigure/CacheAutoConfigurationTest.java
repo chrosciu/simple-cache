@@ -1,10 +1,12 @@
 package eu.chrost.cache.autoconfigure;
 
+import eu.chrost.cache.library.Cache;
 import eu.chrost.cache.library.CacheStorage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,8 +37,7 @@ class CacheAutoConfigurationTest {
     void givenUserConfiguration_whenGetCacheStorageBean_thenHashMapCacheStorageInstanceBacksOff() {
         contextRunner.withUserConfiguration(UserConfiguration.class).run(context -> {
             assertThat(context).hasSingleBean(CacheStorage.class);
-            assertThatExceptionOfType(NoSuchBeanDefinitionException.class)
-                    .isThrownBy(() -> context.getBean(HashMapCacheStorage.class));
+            assertThat(context).doesNotHaveBean(HashMapCacheStorage.class);
         });
     }
 
@@ -46,6 +47,12 @@ class CacheAutoConfigurationTest {
         CacheStorage mockedCacheStorage() {
             return Mockito.mock(CacheStorage.class);
         }
+    }
 
+    @Test
+    void givenNoCacheClassOnClasspath_whenGetCacheStorageBean_thenNoBeanIsReturned() {
+        contextRunner.withClassLoader(new FilteredClassLoader(Cache.class)).run(context -> {
+            assertThat(context).doesNotHaveBean(CacheStorage.class);
+        });
     }
 }
