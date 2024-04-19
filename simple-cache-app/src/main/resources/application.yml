@@ -2,6 +2,8 @@ eu:
   chrost:
     cache:
       size: 5
+      jpa:
+        enabled: true
 spring:
   jpa:
     properties:

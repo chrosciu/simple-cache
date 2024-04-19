@@ -1,10 +1,12 @@
 package eu.chrost.cache.app;
 
 import eu.chrost.cache.library.CacheStorage;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@ConditionalOnProperty(name = "eu.chrost.cache.jpa.enabled")
 class JpaCacheStorage implements CacheStorage {
     private final CacheItemRepository cacheItemRepository;
 
